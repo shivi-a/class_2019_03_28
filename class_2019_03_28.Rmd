@@ -9,20 +9,28 @@ library(tidyverse)
 library(readr)
 library(sf)
 library(fs)
-
+library(ggplot2)
 ```
 
 ```{r hartford, echo=FALSE}
 
 hartford <- read_rds(url("https://stacks.stanford.edu/file/druid:tr137st9964/tr137st9964_ct_hartford_2019_02_25.rds"))
 
+download.file(url = "https://stacks.stanford.edu/file/druid:tr137st9964/tr137st9964_ct_hartford_shapefiles_2019_02_25.tgz",
+              destfile = "shapes.tgz") 
+untar("shapes.tgz")
+
+shapes_data = read_sf("ct_hartford_shapefiles/Hartford_Neighborhoods.shp")
+
+file_delete(c("shapes.tgz", "ct_hartford_shapefiles/"))
 ```
 
 ```{r echo=FALSE}
 
-hartford %>% 
-  filter(subject_race == "asian/pacific islander") %>% 
-  nrow()
+asian_stops = hartford %>% 
+  filter(subject_race == "asian/pacific islander", !is.na(lat), !is.na(lng))
 
+ggplot(data = shapes_data) +
+  geom_sf() + geom_point(data = asian_stops, aes(x = lat, y = lng))
 ```
 
