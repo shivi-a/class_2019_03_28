@@ -1,0 +1,28 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(readr)
+library(sf)
+library(fs)
+
+```
+
+```{r hartford, echo=FALSE}
+
+hartford <- read_rds(url("https://stacks.stanford.edu/file/druid:tr137st9964/tr137st9964_ct_hartford_2019_02_25.rds"))
+
+```
+
+```{r echo=FALSE}
+
+hartford %>% 
+  filter(subject_race == "asian/pacific islander") %>% 
+  nrow()
+
+```
+
